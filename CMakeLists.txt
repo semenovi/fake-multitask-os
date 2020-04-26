@@ -11,10 +11,10 @@ include(CSharpUtilities)
 # The .resx and other Properties files are optional here, but including them makes them visible in the VS solution for easy editing. 
 add_executable(${PROJECT_NAME}
     App.config
-    form_task.cs
+    form_tasks.cs
     machine.cs
-    form_task.Designer.cs
-    form_task.resx
+    form_tasks.Designer.cs
+    form_tasks.resx
     Program.cs
     Properties/AssemblyInfo.cs
     Properties/Resources.Designer.cs
@@ -32,10 +32,10 @@ set(CMAKE_CSharp_FLAGS "/langversion:latest")
 
 # Set the source file properties for Windows Forms use.
 csharp_set_windows_forms_properties(
-    form_task.cs
+    form_tasks.cs
     machine.cs
-    form_task.Designer.cs
-    form_task.resx
+    form_tasks.Designer.cs
+    form_tasks.resx
     Program.cs
     Properties/AssemblyInfo.cs
     Properties/Resources.Designer.cs
