@@ -10,6 +10,7 @@ namespace multiple_task_os
 	class machine
 	{
 		public int N, k, m, b, l, v, d, time;
+		public int[] cpu_t, hdd_t, net_t;
 		public ListView list_tasks;
 		public machine(ListView _list_tasks, int _N, int _k, int _m, int _b, int _l, int _v, int _d)
 		{
@@ -22,6 +23,9 @@ namespace multiple_task_os
 			d = _d;
 			list_tasks = _list_tasks;
 			time = 0;
+			cpu_t = new int[N];
+			hdd_t = new int[N];
+			net_t = new int[N];
 		}
 		public void add_time(int _t, int _cpu, int _hdd, int _net)
 		{
@@ -43,15 +47,46 @@ namespace multiple_task_os
 		{
 			list_tasks.Items[_idx].SubItems[_i].Text = Convert.ToString(_value);
 		}
-		public void exec()
+		public void generate()
 		{
 			Random rnd = new Random();
+			for (int i = 0; i < N; i++)
+			{
+				cpu_t[i] = rnd.Next(k - l, k + l);
+				hdd_t[i] = rnd.Next(m - v, m + v);
+				net_t[i] = rnd.Next(b - d, b + d);
+				add_time(0, cpu_t[i], hdd_t[i], net_t[i]);
+			}
+		}
+		public void sort()
+		{
+			// sort
+			for (int i = 1; i < N; i++)
+			{
+				for (int j = i; j > 0 && cpu_t[j - 1] < cpu_t[j]; j--)
+				{
+					int t = cpu_t[j];
+					cpu_t[j] = cpu_t[j - 1];
+					cpu_t[j - 1] = t;
+					t = hdd_t[j];
+					hdd_t[j] = hdd_t[j - 1];
+					hdd_t[j - 1] = t;
+					t = net_t[j];
+					net_t[j] = net_t[j - 1];
+					net_t[j - 1] = t;
+				}
+			}
+			for (int i = 0; i < N; i++)
+				add_time(0, cpu_t[i], hdd_t[i], net_t[i]);
+		}
+		public void exec()
+		{
 
 			// cpu
 			time = 0;
 			for (int i = 1; i <= N; i++)
 			{
-				time += rnd.Next(k - l, k + l);
+				time += cpu_t[i - 1];
 				add_time(time, i, 0, 0);
 			}
 
@@ -59,26 +94,42 @@ namespace multiple_task_os
 			time = 0;
 			for (int i = 1; i <= N; i++)
 			{
-				time += rnd.Next(k - l, k + l);
-				int j = 0;
-				while (Convert.ToInt32(list_tasks.Items[j].SubItems[1].Text) < i)
+				int idx_first = 0, idx_last = 0;
+				while (idx_first < list_tasks.Items.Count - 1 && Convert.ToInt32(list_tasks.Items[idx_first].SubItems[1].Text) < i + 1)
 				{
-					j++;
+					idx_first++;
 				}
-				if (Convert.ToInt32(list_tasks.Items[j].Text) < time && j != list_tasks.Items.Count - 1)
+				time = Convert.ToInt32(list_tasks.Items[idx_first].Text) + hdd_t[i - 1];
+				idx_last = idx_first;
+				while (idx_last < list_tasks.Items.Count - 1 && Convert.ToInt32(list_tasks.Items[idx_last + 1].Text) < time)
 				{
-					insert_after_idx(j, time,
-						Convert.ToInt32(list_tasks.Items[j].SubItems[1].Text),
-						i,
-						0);
+					idx_last++;
 				}
-				else if (j == list_tasks.Items.Count - 1)
+				if (idx_last == list_tasks.Items.Count - 1)
 				{
-					add_time(time, 0, i, 0);
+					for (int j = idx_first; j <= idx_last; j++)
+					{
+						modify_time(j, 2, i);
+					}
+					if (Convert.ToInt32(list_tasks.Items[idx_last].Text) != time)
+					{
+						insert_after_idx(idx_last, time, 0, i, 0);
+					}
+				}
+				else if (Convert.ToInt32(list_tasks.Items[idx_last + 1].Text) == time)
+				{
+					for (int j = idx_first; j <= idx_last; j++)
+					{
+						modify_time(j, 2, i);
+					}
 				}
 				else
 				{
-					modify_time(j + 1, 2, i);
+					for (int j = idx_first; j <= idx_last; j++)
+					{
+						modify_time(j, 2, i);
+					}
+					insert_after_idx(idx_last, time, Convert.ToInt32(list_tasks.Items[idx_last].SubItems[1].Text), i, 0);
 				}
 			}
 
@@ -86,28 +137,44 @@ namespace multiple_task_os
 			time = 0;
 			for (int i = 1; i <= N; i++)
 			{
-				time += rnd.Next(k - l, k + l);
-				int j = 0;
-				while (Convert.ToInt32(list_tasks.Items[j].SubItems[2].Text) < i)
+				int idx_first = 0, idx_last = 0;
+				while (idx_first < list_tasks.Items.Count - 1 && Convert.ToInt32(list_tasks.Items[idx_first].SubItems[2].Text) < i + 1)
 				{
-					j++;
+					idx_first++;
 				}
-				if (Convert.ToInt32(list_tasks.Items[j].Text) < time && j != list_tasks.Items.Count - 1)
+				time = Convert.ToInt32(list_tasks.Items[idx_first].Text) + net_t[i - 1];
+				idx_last = idx_first;
+				while (idx_last < list_tasks.Items.Count - 1 && Convert.ToInt32(list_tasks.Items[idx_last + 1].Text) < time)
 				{
-					insert_after_idx(j, time,
-						Convert.ToInt32(list_tasks.Items[j].SubItems[1].Text),
-						Convert.ToInt32(list_tasks.Items[j].SubItems[2].Text),
-						i);
+					idx_last++;
 				}
-				else if (j == list_tasks.Items.Count - 1)
+				if (idx_last == list_tasks.Items.Count - 1)
 				{
-					add_time(time, 0, 0, i);
+					for (int j = idx_first; j <= idx_last; j++)
+					{
+						modify_time(j, 3, i);
+					}
+					if (Convert.ToInt32(list_tasks.Items[idx_last].Text) != time)
+					{
+						insert_after_idx(idx_last, time, 0, 0, i);
+					}
+				}
+				else if (Convert.ToInt32(list_tasks.Items[idx_last + 1].Text) == time)
+				{
+					for (int j = idx_first; j <= idx_last; j++)
+					{
+						modify_time(j, 3, i);
+					}
 				}
 				else
 				{
-					modify_time(j + 1, 3, i);
+					for (int j = idx_first; j <= idx_last; j++)
+					{
+						modify_time(j, 3, i);
+					}
+					insert_after_idx(idx_last, time, Convert.ToInt32(list_tasks.Items[idx_last].SubItems[1].Text), Convert.ToInt32(list_tasks.Items[idx_last].SubItems[2].Text), i);
 				}
-			}			
+			}
 		}
 
 	}

@@ -50,6 +50,12 @@
             this.text_N = new System.Windows.Forms.TextBox();
             this.button_clear = new System.Windows.Forms.Button();
             this.button_default = new System.Windows.Forms.Button();
+            this.button_sort = new System.Windows.Forms.Button();
+            this.button_generate = new System.Windows.Forms.Button();
+            this.text_exec_time = new System.Windows.Forms.TextBox();
+            this.text_longest = new System.Windows.Forms.TextBox();
+            this.label_exec_time = new System.Windows.Forms.Label();
+            this.label_longest = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // list_tasks
@@ -59,14 +65,13 @@
             this.column_header_cpu,
             this.column_header_hdd,
             this.column_header_net});
-            this.list_tasks.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.list_tasks.FullRowSelect = true;
             this.list_tasks.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.list_tasks.HideSelection = false;
-            this.list_tasks.Location = new System.Drawing.Point(0, 98);
+            this.list_tasks.Location = new System.Drawing.Point(0, 100);
             this.list_tasks.Margin = new System.Windows.Forms.Padding(1);
             this.list_tasks.Name = "list_tasks";
-            this.list_tasks.Size = new System.Drawing.Size(241, 244);
+            this.list_tasks.Size = new System.Drawing.Size(241, 242);
             this.list_tasks.TabIndex = 8;
             this.list_tasks.TileSize = new System.Drawing.Size(8, 8);
             this.list_tasks.UseCompatibleStateImageBehavior = false;
@@ -94,9 +99,10 @@
             // 
             // button_exec
             // 
-            this.button_exec.Location = new System.Drawing.Point(0, 78);
+            this.button_exec.Enabled = false;
+            this.button_exec.Location = new System.Drawing.Point(121, 80);
             this.button_exec.Name = "button_exec";
-            this.button_exec.Size = new System.Drawing.Size(241, 23);
+            this.button_exec.Size = new System.Drawing.Size(119, 20);
             this.button_exec.TabIndex = 7;
             this.button_exec.Text = "execute";
             this.button_exec.UseVisualStyleBackColor = true;
@@ -110,6 +116,7 @@
             this.text_k.TabIndex = 0;
             this.text_k.Text = "250";
             this.text_k.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.text_k.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.text_k_KeyPress);
             // 
             // text_m
             // 
@@ -119,6 +126,7 @@
             this.text_m.TabIndex = 1;
             this.text_m.Text = "211";
             this.text_m.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.text_m.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.text_m_KeyPress);
             // 
             // text_b
             // 
@@ -128,6 +136,7 @@
             this.text_b.TabIndex = 2;
             this.text_b.Text = "403";
             this.text_b.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.text_b.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.text_b_KeyPress);
             // 
             // text_d
             // 
@@ -137,6 +146,7 @@
             this.text_d.TabIndex = 6;
             this.text_d.Text = "56";
             this.text_d.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.text_d.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.text_d_KeyPress);
             // 
             // text_v
             // 
@@ -146,6 +156,7 @@
             this.text_v.TabIndex = 5;
             this.text_v.Text = "21";
             this.text_v.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.text_v.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.text_v_KeyPress);
             // 
             // text_l
             // 
@@ -155,6 +166,7 @@
             this.text_l.TabIndex = 4;
             this.text_l.Text = "93";
             this.text_l.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.text_l.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.text_l_KeyPress);
             // 
             // label_k
             // 
@@ -227,6 +239,7 @@
             this.text_N.TabIndex = 3;
             this.text_N.Text = "30";
             this.text_N.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.text_N.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.text_N_KeyPress);
             // 
             // button_clear
             // 
@@ -248,11 +261,76 @@
             this.button_default.UseVisualStyleBackColor = true;
             this.button_default.Click += new System.EventHandler(this.button_default_Click);
             // 
+            // button_sort
+            // 
+            this.button_sort.Enabled = false;
+            this.button_sort.Location = new System.Drawing.Point(61, 80);
+            this.button_sort.Name = "button_sort";
+            this.button_sort.Size = new System.Drawing.Size(61, 20);
+            this.button_sort.TabIndex = 17;
+            this.button_sort.Text = "sort";
+            this.button_sort.UseVisualStyleBackColor = true;
+            this.button_sort.Click += new System.EventHandler(this.button_sort_Click);
+            // 
+            // button_generate
+            // 
+            this.button_generate.Location = new System.Drawing.Point(1, 80);
+            this.button_generate.Name = "button_generate";
+            this.button_generate.Size = new System.Drawing.Size(61, 20);
+            this.button_generate.TabIndex = 18;
+            this.button_generate.Text = "generate";
+            this.button_generate.UseVisualStyleBackColor = true;
+            this.button_generate.Click += new System.EventHandler(this.button_generate_Click);
+            // 
+            // text_exec_time
+            // 
+            this.text_exec_time.Location = new System.Drawing.Point(121, 343);
+            this.text_exec_time.Name = "text_exec_time";
+            this.text_exec_time.ReadOnly = true;
+            this.text_exec_time.Size = new System.Drawing.Size(119, 20);
+            this.text_exec_time.TabIndex = 19;
+            this.text_exec_time.Text = "not available";
+            // 
+            // text_longest
+            // 
+            this.text_longest.Location = new System.Drawing.Point(121, 364);
+            this.text_longest.Name = "text_longest";
+            this.text_longest.ReadOnly = true;
+            this.text_longest.Size = new System.Drawing.Size(119, 20);
+            this.text_longest.TabIndex = 20;
+            this.text_longest.Text = "not available";
+            // 
+            // label_exec_time
+            // 
+            this.label_exec_time.Location = new System.Drawing.Point(0, 343);
+            this.label_exec_time.Name = "label_exec_time";
+            this.label_exec_time.Size = new System.Drawing.Size(119, 20);
+            this.label_exec_time.TabIndex = 21;
+            this.label_exec_time.Text = "execution time:";
+            this.label_exec_time.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label_longest
+            // 
+            this.label_longest.Location = new System.Drawing.Point(0, 364);
+            this.label_longest.Name = "label_longest";
+            this.label_longest.Size = new System.Drawing.Size(119, 20);
+            this.label_longest.TabIndex = 22;
+            this.label_longest.Text = "longest process:";
+            this.label_longest.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // form_tasks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(241, 342);
+            this.ClientSize = new System.Drawing.Size(241, 385);
+            this.Controls.Add(this.label_longest);
+            this.Controls.Add(this.label_exec_time);
+            this.Controls.Add(this.text_longest);
+            this.Controls.Add(this.text_exec_time);
+            this.Controls.Add(this.list_tasks);
+            this.Controls.Add(this.text_v);
+            this.Controls.Add(this.text_l);
+            this.Controls.Add(this.button_sort);
             this.Controls.Add(this.button_default);
             this.Controls.Add(this.button_clear);
             this.Controls.Add(this.label_N);
@@ -264,13 +342,11 @@
             this.Controls.Add(this.label_m);
             this.Controls.Add(this.label_k);
             this.Controls.Add(this.text_d);
-            this.Controls.Add(this.text_v);
-            this.Controls.Add(this.text_l);
             this.Controls.Add(this.text_b);
             this.Controls.Add(this.text_m);
             this.Controls.Add(this.text_k);
             this.Controls.Add(this.button_exec);
-            this.Controls.Add(this.list_tasks);
+            this.Controls.Add(this.button_generate);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "form_tasks";
@@ -304,6 +380,12 @@
         private System.Windows.Forms.TextBox text_N;
         private System.Windows.Forms.Button button_clear;
         private System.Windows.Forms.Button button_default;
+        private System.Windows.Forms.Button button_sort;
+        private System.Windows.Forms.Button button_generate;
+        private System.Windows.Forms.TextBox text_exec_time;
+        private System.Windows.Forms.TextBox text_longest;
+        private System.Windows.Forms.Label label_exec_time;
+        private System.Windows.Forms.Label label_longest;
     }
 }
 
